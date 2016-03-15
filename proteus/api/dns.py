@@ -98,6 +98,16 @@ class DNS(object):
                 count = count - 1
         return None
 
+    def _add_cname_record(self, aliasname, linkedrecordname, ttl=300L, properties="", view=None, view_name=None, rec_type=TYPE_CNAMERECORD):
+        viewId = self.get_view(view_name).id
+        self._client.add_cname(viewId, aliasname, linkedrecordname, ttl, properties)
+        return None
+
+    def _add_externalhost_record(self, hostname, properties="", view=None, view_name=None):
+        viewId = self.get_view(view_name).id
+        self._client.add_externalhost(viewId, hostname,  properties)
+        return None
+
     def _find_zone(self, zonename, view=None, view_name=None):
         """Find last zone from zonename
         
@@ -305,6 +315,42 @@ class DNS(object):
         """
         return self._get_record(hostname, zonename, view, view_name,
                                 TYPE_CNAMERECORD)
+
+    def add_cname_record(self, aliasname, linkedrecordname, ttl=3600, properties="", view=None, view_name=None):
+        """Add a CNAME Record to Proteus
+
+        :param aliasname: the absolute alias hostname
+        :type aliasname: str
+        :param linkedrecordname: the absolute target record  hostname
+        :type linkedrecordname: str
+        :param ttl: ttl in seconds
+        :type ttl: long
+        :param properties: some properties
+        :type properties: str
+        :param view: View name (can be None when view_name is not None)
+        :type view: :py:class:`proteus.objects.apientity.View`
+        :param view_name: View Name (can be None when view is not None)
+        :type view_name: str
+
+        :returns: :py:class:`proteus.objects.apientity.CNAMERecord`
+        """
+        return self._add_cname_record(aliasname, linkedrecordname, ttl, properties, view, view_name)
+
+    def add_externalhost_record(self, hostname, properties="", view=None, view_name=None):
+        """Add a CNAME Record to Proteus
+
+        :param hostname: the absolute external hostname
+        :type hostname: str
+        :param properties: some properties
+        :type properties: str
+        :param view: View name (can be None when view_name is not None)
+        :type view: :py:class:`proteus.objects.apientity.View`
+        :param view_name: View Name (can be None when view is not None)
+        :type view_name: str
+
+        :returns: :py:class:`proteus.objects.apientity.CNAMERecord`
+        """
+        return self._add_externalhost_record(hostname, properties, view, view_name)
 
     def get_hinfo_record(self, hostname, zonename, view=None, view_name=None):
         """Retrieve HINFO Record from Proteus

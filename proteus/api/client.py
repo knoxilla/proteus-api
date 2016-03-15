@@ -181,6 +181,16 @@ class ProteusClientApi(object):
                 return False
         return None
 
+    def add_cname(self, view_id, name, targetname, ttl=300L, props=""):
+        self._client.service.addAliasRecord(view_id, name, targetname, ttl, props)
+        # TODO: check and wrap for suds/soap faults to return a meaningful response
+        return True
+
+    def add_externalhost(self, view_id, name, props=""):
+        self._client.service.addExternalHostRecord(view_id, name, props)
+        # TODO: check and wrap for suds/soap faults to return a meaningful response
+        return True
+
     def is_valid_connection(self):
         """
         Checks if the client is connected and authenticated

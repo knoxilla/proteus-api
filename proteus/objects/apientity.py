@@ -178,8 +178,14 @@ class MXRecord(ProteusDataObjects):
 
 
 class CNAMERecord(ProteusDataObjects):
-    pass
+    def add(self, *args, **kwargs):
+        pass
 
+    def update(self, *args, **kwargs):
+        pass
+
+    def delete(self, *args, **kwargs):
+        pass
 
 class HINFORecord(ProteusDataObjects):
     pass
