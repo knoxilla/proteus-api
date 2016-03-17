@@ -43,6 +43,13 @@ if __name__=='__main__':
      
     #a.get_dns().add_cname_record("la-dee-dah.engin.umich.edu","engin-vhost.engin.umich.edu", 600L, "",view_name="Default View")
 
+    b=a.get_dns().get_externalhost_record("ec2-54-210-113-20.compute-1.amazonaws.com","nope",view_name="Default View")
+
+    print b
+    print b.name
+    print b.type
+    print b.id
+
     # add externalhost
 ##    targethost = "openshift-master.caen-aws.engin.umich.edu"
     #a.get_dns().add_externalhost_record(targethost,"",view_name="Default View")

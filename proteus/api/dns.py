@@ -67,6 +67,7 @@ class DNS(object):
                 - :py:class:`proteus.objects.apientity.HINFORecord`
                 - :py:class:`proteus.objects.apientity.CNAMERecord`
                 - :py:class:`proteus.objects.apientity.SRVRecord`
+                - :py:class:`proteus.objects.apientity.ExternalHostRecord`
 
         See: [#private_method]_
         """
@@ -157,6 +158,8 @@ class DNS(object):
                 - :py:class:`proteus.objects.apientity.TXTRecord`
                 - :py:class:`proteus.objects.apientity.SRVRecord`
                 - :py:class:`proteus.objects.apientity.HINFORecord`
+                - :py:class:`proteus.objects.apientity.CNAMERecord`
+                - :py:class:`proteus.objects.apientity.ExternalHostRecord`
             
         """
         if self._client.is_valid_connection():
@@ -337,7 +340,7 @@ class DNS(object):
         return self._add_cname_record(aliasname, linkedrecordname, ttl, properties, view, view_name)
 
     def add_externalhost_record(self, hostname, properties="", view=None, view_name=None):
-        """Add a CNAME Record to Proteus
+        """Add an External Host  Record to Proteus
 
         :param hostname: the absolute external hostname
         :type hostname: str
@@ -351,6 +354,21 @@ class DNS(object):
         :returns: :py:class:`proteus.objects.apientity.CNAMERecord`
         """
         return self._add_externalhost_record(hostname, properties, view, view_name)
+
+    def get_externalhost_record(self, hostname, zonename, view=None, view_name=None):
+        """Retrieve ExternalHost Record from Proteus
+        
+        :param hostname: the hostname
+        :type hostname: str
+        :param view: View name (can be None when view_name is not None)
+        :type view: :py:class:`proteus.objects.apientity.View`
+        :param view_name: View Name (can be None when view is not None)
+        :type view_name: str
+        
+        :returns: :py:class:`proteus.objects.apientity.ExternalHostRecord`
+        """
+        return self._get_record(hostname, zonename, view, view_name,
+                                TYPE_EXTERNALHOSTRECORD)
 
     def get_hinfo_record(self, hostname, zonename, view=None, view_name=None):
         """Retrieve HINFO Record from Proteus
@@ -407,6 +425,8 @@ class DNS(object):
                 - :py:class:`proteus.objects.apientity.TXTRecord`
                 - :py:class:`proteus.objects.apientity.SRVRecord`
                 - :py:class:`proteus.objects.apientity.HINFORecord`
+                - :py:class:`proteus.objects.apientity.CNAMERecord`
+                - :py:class:`proteus.objects.apientity.ExternalHostRecord`
             - or when rec_type is DNS_ALLTYPES:
                 - return a mixed list of all types above 
         """

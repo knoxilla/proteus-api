@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#!/usr/bin/env python
 
 from proteus import ProteusClient
 
@@ -21,4 +20,4 @@ if __name__=='__main__':
     #d=a.get_zone_list('ops.expertcity.com',view_name='Internal')
     #for i in d:
     #    print '%s - %s' % (i.name,i.type)
-    #a.logout()
+    a.logout()

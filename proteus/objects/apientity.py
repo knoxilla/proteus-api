@@ -61,6 +61,8 @@ class APIObject(object):
                 return HINFORecord(*args, **kwargs)
             if obj_type.lower() == 'srvrecord':
                 return SRVRecord(*args, **kwargs)
+            if obj_type.lower() == 'externalhostrecord':
+                return ExternalHostRecord(*args, **kwargs)
 
         return None
 
@@ -159,6 +161,16 @@ class View(ProteusDataObjects):
 
 
 class HostRecord(ProteusDataObjects):
+    def add(self, *args, **kwargs):
+        pass
+
+    def update(self, *args, **kwargs):
+        pass
+
+    def delete(self, *args, **kwargs):
+        pass
+
+class ExternalHostRecord(ProteusDataObjects):
     def add(self, *args, **kwargs):
         pass
 
