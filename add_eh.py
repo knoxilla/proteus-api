@@ -1,52 +1,55 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-# https://proteus1.umnet.umich.edu/Services/API?wsdl
-
-from proteus import ProteusClient as pclient
 import sys
 import os
 from pprint import pprint as pp
-from ConfigParser import SafeConfigParser
+
+from prepare import get_client as Client
+
+import logging
+
+client = None
 
 def main(argv):
-
     if(len(sys.argv) != 2):
         sys.exit('Usage: %s <FQDN-of-ExternalHost>' % (sys.argv[0]))
     targethost = argv[1]
 
-    # read ini file
-    ini = SafeConfigParser()
-    ini.read(os.path.expanduser('~/.proteus'))
-    # config
-    API_USER = ini.get('account','username')
-    API_PASSWD = ini.get('account','password')
-    SERVER_URL = ini.get('account','server')
-    DEVSERVER_URL = ini.get('account','devserver')
-    CONFIG_NAME = ini.get('account','default_config_name')
-    # get client, login
-    a = pclient(SERVER_URL, API_USER, API_PASSWD, CONFIG_NAME)
-    a.login()
+    logging.basicConfig(level=logging.INFO)
+    #logging.getLogger('suds.client').setLevel(logging.DEBUG)
+
+    global client
+    client = Client()
 
     # already exists?
-    x=a.get_dns().get_externalhost_record(targethost,"nope",view_name="Default View")
-    if x:
-        print "\n%s already has an ExternalHost record.  :)\n" % (targethost)
+    print "Checking if exists...\n"
+    if already_exists(targethost):
         exit(0)
 
     # add externalhost
-    a.get_dns().add_externalhost_record(targethost,'',view_name="Default View")
+    client.get_dns().add_externalhost_record(targethost,'',view_name="Default View")
 
-    # check it
-    c=a.get_dns().get_externalhost_record(targethost,"nope",view_name="Default View")
+    # re-check it
+    recheck=client.get_dns().get_externalhost_record(targethost,"nope",view_name="Default View")
 
     # double-check results
-    print c.name
-    print c.type
-    print c.id
+    print recheck.name
+    print recheck.type
+    print recheck.id
+    pp(recheck.properties)
 
-    a.logout()
+    client.logout()
 
     exit(0)
+
+def already_exists(targethost):
+    check = client.get_dns().get_externalhost_record(targethost,"nope",view_name="Default View")
+    if check:
+        print "ExternalHost %s already exists. Update instead? :)\n" % (targethost)
+        return True
+    else:
+        return False
 
 if __name__ == '__main__':
     main(sys.argv)

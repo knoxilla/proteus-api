@@ -88,6 +88,13 @@ class ProteusPropertyObject(object):
             self.__dict__['_property_list'].append(i.split('=')[0])
             self.__dict__.update(dc)
 
+    def __getattr__(self, name):
+        if '_property_list' in self.__dict__:
+            if name in self.__dict__['_property_list']:
+                return self._property_list[name]
+        #return super(ProteusPropertyObject, self).__getattr__(name)
+        return None
+
     def __repr__(self):
         a = super(ProteusPropertyObject, self).__repr__()
         return '%s | Property List: %s' % (a, self._property_list)

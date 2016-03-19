@@ -126,6 +126,32 @@ class ProteusClientApi(object):
         except Exception, e:
             print e
 
+    def _update(self, entity=None):
+        """
+        wrapper for Proteus SOAP API Method update
+
+        :Parameters:
+            - `entity` : APIEntity
+        :return:
+            None
+
+        """
+
+        if entity.type not in ALL_TYPES:
+            raise Exception("Unknown Entity Type")
+        if self._is_connected:
+            try:
+                #print entity.type
+                #print entity.id
+                #print entity.name
+                #print entity.properties.ttl
+                #print entity.properties.absoluteName
+                #print entity.properties.linkedRecordName
+                self._client.service.update(entity=entity)
+            except Exception, e:
+                print e
+        return None
+
     def _get_entity_by_name(self, parent_id, entity_name, entity_type):
         """
         Wrapper for Proteus SOAP API Method getEntityByName

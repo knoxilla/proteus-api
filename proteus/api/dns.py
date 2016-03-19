@@ -99,6 +99,10 @@ class DNS(object):
                 count = count - 1
         return None
 
+    def _update(self, entity):
+        self._client._update(entity = entity)
+        return None
+
     def _add_cname_record(self, aliasname, linkedrecordname, ttl=300L, properties="", view=None, view_name=None, rec_type=TYPE_CNAMERECORD):
         viewId = self.get_view(view_name).id
         self._client.add_cname(viewId, aliasname, linkedrecordname, ttl, properties)
@@ -106,7 +110,7 @@ class DNS(object):
 
     def _add_externalhost_record(self, hostname, properties="", view=None, view_name=None):
         viewId = self.get_view(view_name).id
-        self._client.add_externalhost(viewId, hostname,  properties)
+        self._client.add_externalhost(viewId, hostname, properties)
         return None
 
     def _find_zone(self, zonename, view=None, view_name=None):
@@ -354,6 +358,16 @@ class DNS(object):
         :returns: :py:class:`proteus.objects.apientity.CNAMERecord`
         """
         return self._add_externalhost_record(hostname, properties, view, view_name)
+
+    def update(self, entity=None):
+        """Update an existing Record of some sort
+
+        :param entity: the entity, already updated by you
+
+        :returns: boolean
+        :returns: :py:class:`proteus.objects.apientity.APIEntity`
+        """
+        return self._update(entity=entity)
 
     def get_externalhost_record(self, hostname, zonename, view=None, view_name=None):
         """Retrieve ExternalHost Record from Proteus
