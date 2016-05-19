@@ -76,7 +76,7 @@ def already_exists(hostname, zonename):
     check = client.get_dns().get_cname_record(hostname, zonename, view_name='Default View')
 
     if check:
-        print "CNAME %s.%s already exists. Update instaead? :)\n" % (hostname, zonename)
+        print "CNAME %s.%s already exists. Update instead? :)\n" % (hostname, zonename)
         return True
     else:
         return False

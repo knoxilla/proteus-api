@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# what cnames point at a given EH (by entityId):
+# client._client.service.getLinkedEntities(15855813,"AliasRecord",0,10)
+
 import sys
 import os
 from pprint import pprint as pp
@@ -47,6 +50,10 @@ def already_exists(targethost):
     check = client.get_dns().get_externalhost_record(targethost,"nope",view_name="Default View")
     if check:
         print "ExternalHost %s already exists. Update instead? :)\n" % (targethost)
+        print check.id
+        print check.name
+        pp(check.properties)
+        pp(client._client.service.getLinkedEntities(check.id,"AliasRecord",0,10))
         return True
     else:
         return False
