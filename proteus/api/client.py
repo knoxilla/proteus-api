@@ -34,6 +34,20 @@ except ImportError, e:
     print "You don't have the python suds library installed."
     sys.exit(1)
 
+## Deal with mismatched cert on endpoint host - do not verify!
+## Relies on extra module sslcontext.py...
+# https://github.com/icatproject/python-icat/blob/master/icat/sslcontext.py
+# https://bitbucket.org/jurko/suds/issues/78/allow-bypassing-ssl-certificate#comment-18743957
+## Alternative methods include suds_requests and zeep python packages.
+from sslcontext import create_ssl_context, HTTPSTransport
+sslverify = False
+cafile = None
+capath = None
+kwargs = {}
+ctx = create_ssl_context(sslverify, cafile, capath)
+kwargs['transport'] = HTTPSTransport(ctx)
+# Add more suds client kwargs if needed, then create the client:
+# client = suds.client.Client(url, **kwargs)
 
 from constants import *
 from proteus.objects import *
@@ -72,7 +86,8 @@ class ProteusClientApi(object):
             raise Exception('Disconnect first')
         if self._api_url[-1] != '/':
             self._api_url += '/'
-        self._client = Client('%sServices/API?wsdl' % self._api_url)
+        self._client = Client('%sServices/API?wsdl' % self._api_url,
+            **kwargs)
         self._client.set_options(location='%sServices/API' % self._api_url)
         self._is_connected = True
 
